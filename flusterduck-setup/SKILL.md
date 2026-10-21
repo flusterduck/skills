@@ -49,7 +49,7 @@ Paste before the closing `</body>`:
 Two attributes are not optional:
 
 - `async`, never `defer`: a slow or unreachable CDN must never delay the host page's `DOMContentLoaded`.
-- `data-dnt="false"`: the SDK respects Do Not Track by default, which silently drops 30 to 50 percent of visitors (Firefox, Brave, privacy extensions). Flusterduck captures no PII, no form values, no keystrokes, so DNT filtering costs data for no privacy gain.
+- `data-dnt="false"`: by default the SDK skips every visitor whose browser or privacy extension sends Do Not Track or Global Privacy Control. Flusterduck captures no PII, no form values, no keystrokes, so DNT filtering costs data for no privacy gain.
 
 Dynamic injection (tag managers, `document.createElement('script')`) works too: the bootstrap reads `document.currentScript` and falls back to `script[data-key^="fd_pub_"]`.
 
@@ -65,7 +65,7 @@ import { init } from 'flusterduck';
 init({ key: 'fd_pub_xxxxxxxxxxxx', respectDoNotTrack: false });
 ```
 
-The config option is `key`, and `init()` refuses `fd_sec_` and `fd_mcp_` keys. `respectDoNotTrack: false` matters the same way `data-dnt="false"` does on the script tag: the default honors DNT and silently drops 30 to 50 percent of visitors, and Flusterduck captures no PII to begin with. For a framework, install the matching wrapper alongside the SDK. Next.js example:
+The config option is `key`, and `init()` refuses `fd_sec_` and `fd_mcp_` keys. `respectDoNotTrack: false` matters the same way `data-dnt="false"` does on the script tag: the default skips every visitor whose browser sends Do Not Track or Global Privacy Control, and Flusterduck captures no PII to begin with. For a framework, install the matching wrapper alongside the SDK. Next.js example:
 
 ```tsx
 // app/layout.tsx
